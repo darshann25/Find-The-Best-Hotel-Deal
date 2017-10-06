@@ -1,3 +1,7 @@
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.temporal.TemporalAccessor;
+import java.util.Calendar;
 import java.util.Date;
 
 public class Hotel {
@@ -24,12 +28,24 @@ public class Hotel {
     }
 
     // Function to check if date falls within [start_date, end_date]
-    public boolean isDateWithinRange(Date date) {
+    public boolean isDateRangeWithinDealRange(String date, int num_nights) {
 
-        boolean withinRange = false;
+        boolean withinRange = true;
 
-        if (date.equals(start_date) || date.equals(end_date)) withinRange = true;
-        else if (date.after(start_date) && date.before(end_date)) withinRange = true;
+        DateTimeFormatter dateFormatter = DateTimeFormatter.ISO_LOCAL_DATE;
+
+        Date range_start = java.sql.Date.valueOf(LocalDate.parse(date, dateFormatter));
+
+        Calendar c = Calendar.getInstance();
+        c.setTime((Date) dateFormatter.parse(date));
+        c.add(Calendar.DATE, num_nights);  // number of days to add
+        Date range_end = c.getTime();
+
+        if (range_start.before(start_date) || range_start.after(end_date)) withinRange = false;
+        if (range_end.before(start_date) || range_end.after(end_date)) withinRange = false;
+
+        //if (date.equals(start_date) || date.equals(end_date)) withinRange = true;
+        //else if (date.after(start_date) && date.before(end_date)) withinRange = true;
 
         return withinRange;
 
