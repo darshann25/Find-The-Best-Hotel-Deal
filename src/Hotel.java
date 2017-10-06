@@ -20,6 +20,7 @@ public class Hotel {
         this.start_date = start_date;
         this.end_date = end_date;
 
+
     }
 
     // Function to check if date falls within [start_date, end_date]
@@ -34,4 +35,34 @@ public class Hotel {
 
     }
 
+    // Function to evaluate the value of a deal 
+    public double evaluateDeal(int num_nights) {
+
+        double value = nightly_rate * num_nights;
+
+        switch(deal_type) {
+
+            // Although case rebate and rebate_3plus perform
+            // the same function, leaving them as different cases
+            // for any changes in the future
+            case "rebate" :
+                value -= deal_value;
+                break;
+
+            case "rebate_3plus" :
+                value -= deal_value;
+                break;
+
+            case "pct" :
+                double discount = (deal_value / 100.0) * value;
+                value -= discount;
+                break;
+
+            default:
+                break;
+        }
+
+        return value;
+
+    }
 }
