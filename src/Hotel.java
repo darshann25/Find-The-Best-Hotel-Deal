@@ -11,6 +11,7 @@ public class Hotel {
     String deal_type;
     Date start_date;
     Date end_date;
+    int effective_num_nights;
 
     public Hotel(String hotel_name, int nightly_rate, String promo_txt, int deal_value, String deal_type,
                  Date start_date, Date end_date) {
@@ -22,14 +23,14 @@ public class Hotel {
         this.deal_type = deal_type;
         this.start_date = start_date;
         this.end_date = end_date;
-
+        this.effective_num_nights = 0;
 
     }
 
     // Function to check if date falls within [start_date, end_date]
     public boolean isDateRangeWithinDealRange(String date, int num_nights) {
 
-        boolean withinRange = true;
+        boolean withinRange = false;
 
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 
@@ -43,8 +44,28 @@ public class Hotel {
         c.add(Calendar.DATE, num_nights);  // number of days to add
         Date range_end = c.getTime();
 
-        if (range_start.before(start_date) || range_start.after(end_date)) withinRange = false;
-        if (range_end.before(start_date) || range_end.after(end_date)) withinRange = false;
+        // if (range_start.before(start_date) || range_start.after(end_date)) withinRange = false;
+        // if (range_end.before(start_date) || range_end.after(end_date)) withinRange = false;
+
+        if (range_start.after(start_date) || range_end.before(end_date)) withinRange = true;
+        if (range_end.after(start_date) || range_end.before(end_date)) withinRange = true;
+
+        // Calculate effective number of nights for the deal to be valid
+        if (withinRange) {
+            if (range_start.before(start_date) && range_end.before(end_date)) {
+                long diff = Math.abs(range_end.getTime() - start_date.getTime());
+                if (diff == 0) diff++;
+                long diffDays = diff / (24 * 60 * 60 * 1000);
+                effective_num_nights = (int) diffDays;
+            }
+
+            if (range_start.after(start_date) && range_end.after(end_date)) {
+                long diff = Math.abs(end_date.getTime() - range_start.getTime());
+                if (diff == 0) diff++;
+                long diffDays = diff / (24 * 60 * 60 * 1000);
+                effective_num_nights = (int) diffDays;
+            }
+        }
 
         return withinRange;
 
@@ -54,7 +75,8 @@ public class Hotel {
     public double evaluateDeal(int num_nights) {
 
         // using double, since percentages are involved
-        double value = nightly_rate * num_nights;
+        double value1 = nightly_rate * effective_num_nights;    // deal applicable on value1
+        double value2 = nightly_rate * (num_nights - effective_num_nights);     // deal not applicable on value2
 
         switch(deal_type) {
 
@@ -62,23 +84,23 @@ public class Hotel {
             // the same function, I am leaving them as different cases
             // for any changes in the future
             case "rebate" :
-                value -= deal_value;
+                value1 -= deal_value;
                 break;
 
             case "rebate_3plus" :
-                value -= deal_value;
+                if (effective_num_nights >= 3) value1 -= deal_value;
                 break;
 
             case "pct" :
-                double discount = (deal_value / 100.0) * value;
-                value -= discount;
+                double discount = (deal_value / 100.0) * value1;
+                value1 -= discount;
                 break;
 
             default:
                 break;
         }
 
-        return value;
+        return value1 + value2;
 
     }
 }

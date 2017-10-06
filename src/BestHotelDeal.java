@@ -92,7 +92,11 @@ public class BestHotelDeal {
         if (bestDeal == null) {
             return "no deal available";
         } else {
-            return bestDeal.promo_txt;
+            StringBuilder result = new StringBuilder(bestDeal.promo_txt);
+            if (bestDeal.effective_num_nights != num_nights && bestDeal.effective_num_nights != 0) {
+                result.append(" (" + bestDeal.effective_num_nights + " nights)");
+            }
+            return result.toString();
         }
     }
 }
