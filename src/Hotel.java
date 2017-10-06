@@ -46,9 +46,6 @@ public class Hotel {
         if (range_start.before(start_date) || range_start.after(end_date)) withinRange = false;
         if (range_end.before(start_date) || range_end.after(end_date)) withinRange = false;
 
-        //if (date.equals(start_date) || date.equals(end_date)) withinRange = true;
-        //else if (date.after(start_date) && date.before(end_date)) withinRange = true;
-
         return withinRange;
 
     }
@@ -56,12 +53,13 @@ public class Hotel {
     // Function to evaluate the value of a deal
     public double evaluateDeal(int num_nights) {
 
+        // using double, since percentages are involved
         double value = nightly_rate * num_nights;
 
         switch(deal_type) {
 
             // Although case rebate and rebate_3plus perform
-            // the same function, leaving them as different cases
+            // the same function, I am leaving them as different cases
             // for any changes in the future
             case "rebate" :
                 value -= deal_value;
