@@ -19,9 +19,9 @@ public class HotelDB {
             hotel_list = database.get(h.hotel_name);
         } else {
             hotel_list = new ArrayList<>();
-            hotel_list.add(h);
-            database.put(h.hotel_name, hotel_list);
         }
+        hotel_list.add(h);
+        database.put(h.hotel_name, hotel_list);
 
     }
 

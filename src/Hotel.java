@@ -35,7 +35,7 @@ public class Hotel {
 
     }
 
-    // Function to evaluate the value of a deal 
+    // Function to evaluate the value of a deal
     public double evaluateDeal(int num_nights) {
 
         double value = nightly_rate * num_nights;
