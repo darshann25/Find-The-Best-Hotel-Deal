@@ -24,6 +24,8 @@ public class BestHotelDeal {
         /* STEP 2 : FIND THE BEST HOTEL DEAL FROM THE PROVIDED INPUT */
 
         String bestDeal = findBestHotelDeal(hotelDB, args[1], args[2], Integer.parseInt(args[3]));
+        //String bestDeal = findBestHotelDeal(hotelDB, "Days Inn", "2016-03-11", 3);
+
         System.out.println(bestDeal);
 
 
@@ -73,7 +75,7 @@ public class BestHotelDeal {
             loop: for (int i = 0; i < hotel_deals.size(); i++) {
                 Hotel currHotel = hotel_deals.get(i);
 
-                if (currHotel.deal_type.equals("rebate") && num_nights >= 3) continue loop;
+                // if (currHotel.deal_type.equals("rebate") && num_nights >= 3) continue loop;
                 if (currHotel.deal_type.equals("rebate_3plus") && num_nights < 3) continue loop;
 
 
