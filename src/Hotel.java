@@ -1,6 +1,5 @@
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
-import java.time.temporal.TemporalAccessor;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -32,12 +31,15 @@ public class Hotel {
 
         boolean withinRange = true;
 
-        DateTimeFormatter dateFormatter = DateTimeFormatter.ISO_LOCAL_DATE;
-
-        Date range_start = java.sql.Date.valueOf(LocalDate.parse(date, dateFormatter));
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 
         Calendar c = Calendar.getInstance();
-        c.setTime((Date) dateFormatter.parse(date));
+        try {
+            c.setTime(sdf.parse(date));
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        Date range_start = c.getTime();
         c.add(Calendar.DATE, num_nights);  // number of days to add
         Date range_end = c.getTime();
 
