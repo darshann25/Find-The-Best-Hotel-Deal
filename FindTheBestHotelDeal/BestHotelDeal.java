@@ -36,8 +36,6 @@ public class BestHotelDeal {
      */
     public static void main(String[] args) {
 
-        //String[] args = {"./src/deals.csv", "Taj", "2017-01-01", "366"};
-
         /* STEP 1 : INPUT ERROR CHECKING */
 
         if (args.length == 0) printInstructions(Error.ARGS_LEN);    // check if no arguments are passed

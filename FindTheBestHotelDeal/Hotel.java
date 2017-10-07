@@ -84,12 +84,10 @@ public class Hotel {
 
             long diff = 0;
             if (!start_within_range && end_within_range) {
-            //if (range_start.before(start_date) && (range_end.before(end_date) || range_end.equals(end_date))) {
                 diff = Math.abs(range_end.getTime() - start_date.getTime());
             }
 
             if (start_within_range && !end_within_range) {
-            //if ((range_start.after(start_date) || range_start.equals(start_date)) && range_end.after(end_date)) {
                 diff = Math.abs(end_date.getTime() - range_start.getTime());
             }
 
