@@ -28,18 +28,20 @@ public class Hotel {
     }
 
     // Function to check if date falls within [start_date, end_date]
-    public boolean isDateRangeWithinDealRange(String date, int num_nights) {
+    public boolean isDateRangeWithinDealRange(String date, int num_nights) throws ParseException {
 
-        boolean withinRange = false;
+        boolean start_within_range = false;
+        boolean end_within_range = false;
 
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 
-        Calendar c = Calendar.getInstance();
-        try {
-            c.setTime(sdf.parse(date));
-        } catch (ParseException e) {
-            e.printStackTrace();
+        Date tDate = sdf.parse(date);
+        if (!date.equals(sdf.format(tDate))) {
+            throw new ParseException("",0);
         }
+
+        Calendar c = Calendar.getInstance();
+        c.setTime(sdf.parse(date));
         Date range_start = c.getTime();
         c.add(Calendar.DATE, num_nights);  // number of days to add
         Date range_end = c.getTime();
@@ -47,11 +49,11 @@ public class Hotel {
         // if (range_start.before(start_date) || range_start.after(end_date)) withinRange = false;
         // if (range_end.before(start_date) || range_end.after(end_date)) withinRange = false;
 
-        if (range_start.after(start_date) || range_end.before(end_date)) withinRange = true;
-        if (range_end.after(start_date) || range_end.before(end_date)) withinRange = true;
+        if (range_start.after(start_date) && range_start.before(end_date)) start_within_range = true;
+        if (range_end.after(start_date) && range_end.before(end_date)) end_within_range = true;
 
         // Calculate effective number of nights for the deal to be valid
-        if (withinRange) {
+        if (logicalXOR(start_within_range, end_within_range)) {
             if (range_start.before(start_date) && range_end.before(end_date)) {
                 long diff = Math.abs(range_end.getTime() - start_date.getTime());
                 if (diff == 0) diff++;
@@ -67,7 +69,7 @@ public class Hotel {
             }
         }
 
-        return withinRange;
+        return (start_within_range || end_within_range);
 
     }
 
@@ -102,5 +104,9 @@ public class Hotel {
 
         return value1 + value2;
 
+    }
+
+    public static boolean logicalXOR(boolean x, boolean y) {
+        return ( ( x || y ) && ! ( x && y ) );
     }
 }
